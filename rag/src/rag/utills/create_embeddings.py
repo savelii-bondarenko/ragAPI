@@ -46,3 +46,4 @@ class Embedder:
             logger.critical("Failed to encode documents")
             raise e
 
+shared_embedder = Embedder()
