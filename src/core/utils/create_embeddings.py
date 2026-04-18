@@ -45,5 +45,3 @@ class Embedder:
         except Exception as e:
             logger.critical("Failed to encode documents")
             raise e
-
-shared_embedder = Embedder()

@@ -1,11 +1,10 @@
 from numpy import ndarray
 
-from .utills import (read_data, split_text, Embedder, create_vectorDB)
+from .utils import (read_data, split_text, Embedder, create_vectorDB)
 from langchain_core.documents import Document
 from faiss import Index
 
-from .utills.create_embeddings import shared_embedder
-
+from .core import shared_embedder
 
 def prepare_rag_assets(file_path: str):
     """Prepare data for RAG
