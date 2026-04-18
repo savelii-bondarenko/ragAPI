@@ -15,6 +15,9 @@ from langchain_deepseek import ChatDeepSeek
 from .utils.tools import TOOLS
 from .utils.create_embeddings import shared_embedder
 
+from src.core.config import settings
+from src.core.utils.vectorstore import qdrant_client
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -43,11 +46,9 @@ class RAGGraph:
         self.index_id = index_id
         self._tool_node = ToolNode(TOOLS)
 
-        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "utils", "qdrant_data")
-        client = QdrantClient(path=settings.QDRANT_PATH)
-
+        # Используем ЕДИНОГО клиента из vectorstore.py
         self.vector_store = QdrantVectorStore(
-            client=client,
+            client=qdrant_client,
             collection_name=settings.QDRANT_COLLECTION,
             embedding=shared_embedder
         )
