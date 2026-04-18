@@ -11,8 +11,7 @@ from faiss import Index
 from typing import TypedDict, Annotated
 from langchain_deepseek import ChatDeepSeek
 
-from .utills import TOOLS
-
+from .utils.tools import TOOLS
 from dotenv import load_dotenv
 load_dotenv()
 

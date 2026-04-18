@@ -5,8 +5,9 @@ import tempfile
 import asyncio
 
 from src.api.schemas import QueryRequest, QueryResponse, UploadResponse
+
+from src.core.graph_logic import RAGGraph
 from src.core.engine import prepare_rag_assets
-from src.core.graph import RAGGraph
 from src.core import shared_embedder
 
 router = APIRouter()

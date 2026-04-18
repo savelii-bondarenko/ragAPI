@@ -1,28 +1,29 @@
-from numpy import ndarray
-
-from .utils import (read_data, split_text, Embedder, create_vectorDB)
 from langchain_core.documents import Document
 from faiss import Index
 
-from .core import shared_embedder
+from .utils.data_reader import read_data
+from .utils.split_text import split_text
+from .utils.create_embeddings import shared_embedder
+from .utils.vectorstore import create_vectorDB
+
 
 def prepare_rag_assets(file_path: str):
     """Prepare data for RAG
 
-    Args:
-        file_path (str): Path to the file
+        Args:
+            file_path (str): Path to the file
 
-    Returns:
-        splitted_text (str): splitted text for chunks.
+        Returns:
+            splitted_text (str): splitted text for chunks.
 
-        embedder (Embedder): embedder class for create embeddings.
+            embedder (Embedder): embedder class for create embeddings.
 
-        vector_db (faiss.Index): vector database.
+            vector_db (faiss.Index): vector database.
     """
-    extracted_text: str = read_data(file_path)
-    splitted_text: list[Document] = split_text(extracted_text)
-    embedder = shared_embedder
-    embeddings: ndarray = embedder.make_embeddings(splitted_text)
-    vector_db: Index = create_vectorDB(embeddings)
+    extracted_text = read_data(file_path)
+    splitted_text = split_text(extracted_text)
 
-    return splitted_text, embedder, vector_db
+    embeddings = shared_embedder.make_embeddings(splitted_text)
+    vector_db = create_vectorDB(embeddings)
+
+    return splitted_text, shared_embedder, vector_db

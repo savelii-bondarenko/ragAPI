@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from src import router
+from src.api.routes import router
 
 app = FastAPI(title="Python RAG Worker")
 
