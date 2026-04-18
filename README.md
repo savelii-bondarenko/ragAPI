@@ -9,7 +9,6 @@ A high-performance, stateless **Retrieval-Augmented Generation (RAG)** microserv
 * **Vector Search:** Powered by **Qdrant** in local storage mode for fast and reliable document retrieval.
 * **AI Agents with Tools:** Built using **LangGraph**, allowing the LLM to use external tools (like calculators) to provide accurate answers.
 * **Advanced Embeddings:** Uses the `BAAI/bge-m3` model for high-quality multilingual vectorization.
-* **Secure API:** Protected via `X-API-Key` header authentication.
 
 ## 🛠 Tech Stack
 
