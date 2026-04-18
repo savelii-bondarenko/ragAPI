@@ -1,49 +1,49 @@
-import numpy as np
-from FlagEmbedding import BGEM3FlagModel
-from langchain_core.documents import Document
+from FlagEmbedding import FlagModel
+from langchain_core.embeddings import Embeddings
 import logging
 
 logger = logging.getLogger(__name__)
 
-class Embedder:
-    """
-    Args:
-        model_name (str): HuggingFace model name.
-    """
-    def __init__(self, model_name: str = 'BAAI/bge-m3'):
-        try:
-            self.model = BGEM3FlagModel(model_name)
-            logger.info(f"BGEM3 flag model loaded: {model_name}")
-        except Exception as e:
-            logger.critical("Failed to load BGEM3 flag model")
-            raise e
 
-    def make_embeddings(self,
-                        data: list[Document],
-                        batch_size: int = 128) -> np.ndarray:
-        """Make embeddings from a list of documents.
+class Embedder(Embeddings):
+    """Embedder class compatible with LangChain."""
+
+    def __init__(self, model_name: str = "BAAI/bge-m3", **kwargs):
+        """Initializes the Embedder.
 
         Args:
-            data (list[Document]): List of documents.
-            batch_size (int, optional): Batch size. Defaults to 128.
+            model_name (str): The name of the model to use.
+            **kwargs: Additional parameters for the FlagModel.
+        """
+        logger.info(f"Initializing Embedder with model: {model_name}")
+        self.model = FlagModel(model_name, **kwargs)
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        """Embed a list of documents.
+
+        Args:
+            texts (list[str]): List of texts to embed.
 
         Returns:
-            np.ndarray: 2D array of dense_vecs.
-
-        Raises:
-            Exception: If encoding fails.
+            list[list[float]]: List of embeddings.
         """
-        try:
-            prepared_data = [line.page_content for line in data]
-            embeddings = self.model.encode(
-                sentences=prepared_data,
-                batch_size=batch_size,
-                return_dense=True
-            )
-            logger.info("Embeddings prepared")
-            return embeddings["dense_vecs"]
-        except Exception as e:
-            logger.critical("Failed to encode documents")
-            raise e
+        embeddings = self.model.encode(texts)
+        return embeddings.tolist()
 
-shared_embedder = Embedder()
+    def embed_query(self, text: str) -> list[float]:
+        """Embed a single query.
+
+        Args:
+            text (str): Query text to embed.
+
+        Returns:
+            list[float]: Embedding vector.
+        """
+        embedding = self.model.encode([text])
+        return embedding[0].tolist()
+
+
+shared_embedder = Embedder(
+    query_instruction_for_retrieval="Given a web search query, retrieve relevant passages that answer the query",
+    use_fp16=True
+)

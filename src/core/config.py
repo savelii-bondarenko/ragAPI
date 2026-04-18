@@ -14,8 +14,6 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "deepseek-chat"
     DEEPSEEK_API_KEY: str  
 
-    API_SECRET_KEY: str = "change_me_in_production"
-
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
